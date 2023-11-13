@@ -729,7 +729,247 @@ load_sprites:
 	STA PPUDATA
 
 	;completed right skull render
+;render left RIP
 
+	;render RIP bottom left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$62   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$55   
+	STA PPUDATA
+	
+	;render RIP bottom right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$65   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$58   
+	STA PPUDATA
+
+	;render RIP bottom middle right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$64   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$57   
+	STA PPUDATA
+
+	;render RIP bottom middle left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$63   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$56   
+	STA PPUDATA
+
+	;render RIP middle left left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$42   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$45   
+	STA PPUDATA
+
+	;render RIP middle  left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$43   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$46   
+	STA PPUDATA
+
+	;render RIP middle  left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$44   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$47   
+	STA PPUDATA
+
+	;render RIP top left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$23   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$36   
+	STA PPUDATA
+
+	;render RIP top right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$24   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$37   
+	STA PPUDATA
+
+	;completed left RIP render
+
+	;render right RIP
+
+	;render RIP bottom left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$7a   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$55   
+	STA PPUDATA
+	
+	;render RIP bottom right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$7d   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$58   
+	STA PPUDATA
+
+	;render RIP bottom middle right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$7c   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$57   
+	STA PPUDATA
+
+	;render RIP bottom middle left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$7b   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$56   
+	STA PPUDATA
+
+	;render RIP middle left left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$5a   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$45   
+	STA PPUDATA
+
+	;render RIP middle  left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$5b   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$46   
+	STA PPUDATA
+
+	;render RIP middle  right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$5c   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$47   
+	STA PPUDATA
+
+	;render RIP top left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$3b   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$36   
+	STA PPUDATA
+
+	;render RIP top right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$3c   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$37   
+	STA PPUDATA
+
+	;completed right RIP render
 	
 
 	; finally, attribute table
