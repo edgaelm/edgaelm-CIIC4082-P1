@@ -566,6 +566,170 @@ load_sprites:
 	STA PPUDATA
 	;completed floor render
 
+	;render left skull
+
+	;render skull stick bottom left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$60   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$50   
+	STA PPUDATA
+	
+	;render skull stick bottom right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$61   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$51   
+	STA PPUDATA
+
+	;render skull stick middle right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$41   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$41   
+	STA PPUDATA
+
+	;render skull stick middle left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$40   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$40   
+	STA PPUDATA
+
+	;render skull stick top left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$20   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$30   
+	STA PPUDATA
+
+	;render skull stick top right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$21   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$31   
+	STA PPUDATA
+
+	;completed left skull render
+
+	;render right skull
+
+	;render skull stick bottom left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$7e   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$50   
+	STA PPUDATA
+	
+	 ;render skull stick bottom right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$7f   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$51   
+	STA PPUDATA
+
+	;render skull stick middle right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$5f   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$41   
+	STA PPUDATA
+
+	;render skull stick middle left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$5e   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$40   
+	STA PPUDATA
+
+	;render skull stick top left
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$3e   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$30   
+	STA PPUDATA
+
+	;render skull stick top right
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$3f   
+	STA PPUADDR
+	
+	LDA PPUSTATUS
+	LDA #$23
+	STA PPUADDR
+	LDA #$31   
+	STA PPUDATA
+
+	;completed right skull render
+
 	
 
 	; finally, attribute table
