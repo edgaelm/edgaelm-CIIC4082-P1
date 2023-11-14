@@ -38,16 +38,16 @@ load_palettes_loop:
   CPX #$20		; compares value with32 palette value
   BNE load_palettes_loop 	; begin loop again if there are elements left
 
-;sprites
+; ;sprites
 
-load_sprites:
-	LDX #$00	; starts at zero
-load_sprites_loop:
-	LDA sprites, x  ; loads sprite data and sets an offset of x value
-	STA $0200, x	; stores in ram address with offset of x value
-	INX				; increments x to go to the next element
-	CPX #$2d		; compares with the sprite data amount
-	BNE load_sprites_loop ; begin loop again if there are elements left
+; load_sprites:
+; 	LDX #$00	; starts at zero
+; load_sprites_loop:
+; 	LDA sprites, x  ; loads sprite data and sets an offset of x value
+; 	STA $0200, x	; stores in ram address with offset of x value
+; 	INX				; increments x to go to the next element
+; 	CPX #$2d		; compares with the sprite data amount
+; 	BNE load_sprites_loop ; begin loop again if there are elements left
 
 ;background
 
