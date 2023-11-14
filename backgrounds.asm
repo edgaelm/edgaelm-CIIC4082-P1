@@ -27,14 +27,14 @@
 load_palettes:
   LDX PPUSTATUS ; load ppu status register
   LDX #$3f ; load high byte value into accumulator
-  STX PPUADDR ; store high byte of ppu address 
+  STX PPUADDR  
   LDX #$00	; set register value x to 0
   STX PPUADDR
   
 
 load_palettes_loop:
   LDA palettes, X 	; load value from palette array with offset of x value
-  STA PPUDATA		; stores accumulator value into ppu memory into address specifies
+  STA PPUDATA		
   INX			; increments x register value to move to the next element
   CPX #$20		; compares value with32 palette value
   BNE load_palettes_loop 	; begin loop again if there are elements left
@@ -53,17 +53,17 @@ load_sprites_loop:
 ;background
 
 load_backgrund:
-LDX PPUSTATUS		; ppu status
+LDX PPUSTATUS
 LDX #$20
-STX PPUADDR		; writes high byte
+STX PPUADDR		
 LDX #$00
-STX PPUADDR		; writes low byte
+STX PPUADDR		
 
 ;loads first 256 bytes
 LDX #$00		;sets x to 0
 load_background_loop1:
 LDA map, x  ; loads map value at offset x
-STA PPUDATA	; writes in ppu
+STA PPUDATA	
 INX			; goes to next element
 BNE load_background_loop1 ; stays in loop until reaches zero
 
@@ -71,7 +71,7 @@ BNE load_background_loop1 ; stays in loop until reaches zero
 LDX #$00		;sets x to 0
 load_background_loop2:
 LDA map+256, x  ; loads map value at offset x
-STA PPUDATA	; writes in ppu
+STA PPUDATA	
 INX			; goes to next element
 BNE load_background_loop2 ; stays in loop until reaches zero
 
@@ -79,7 +79,7 @@ BNE load_background_loop2 ; stays in loop until reaches zero
 LDX #$00		;sets x to 0
 load_background_loop3:
 LDA map+512, x  ; loads map value at offset x
-STA PPUDATA	; writes in ppu
+STA PPUDATA	
 INX			; goes to next element
 BNE load_background_loop3 ; stays in loop until reaches zero
 
@@ -87,7 +87,7 @@ BNE load_background_loop3 ; stays in loop until reaches zero
 LDX #$00		;sets x to 0
 load_background_loop4:
 LDA map+768, x  ; loads map value at offset x
-STA PPUDATA	; writes in ppu
+STA PPUDATA	
 INX			; goes to next element
 BNE load_background_loop4 ; stays in loop until reaches zero
 
@@ -115,7 +115,7 @@ palettes:
 .byte $0f, $19, $09, $29
 
 .byte $0f, $15, $37, $2a
-.byte $0f, $19, $09, $29
+.byte $0f, $02, $10, $20
 .byte $0f, $19, $09, $29
 .byte $0f, $19, $09, $29
 
