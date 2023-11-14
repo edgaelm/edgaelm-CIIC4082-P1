@@ -179,7 +179,63 @@ sprites:
 .byte $70, $1d, $00, $88
 .byte $70, $1e, $00, $90
 
-;
+; ;facing left
+
+;sprite static
+
+	;  y   tile att   x
+.byte $78, $02, $40, $58
+.byte $78, $01, $40, $60
+.byte $80, $12, $40, $58
+.byte $80, $11, $40, $60
+
+	
+;sprite run 1
+
+	;  y   tile att   x
+.byte $78, $04, $40, $68
+.byte $78, $03, $40, $70
+.byte $80, $14, $40, $68
+.byte $80, $13, $40, $70
+
+;sprite run 2
+
+	;  y   tile att   x
+.byte $78, $06, $40, $78
+.byte $78, $05, $40, $80
+.byte $80, $16, $40, $78
+.byte $80, $15, $40, $80
+
+;sprite run 3
+
+	;  y   tile att   x
+.byte $78, $08, $40, $88
+.byte $78, $07, $40, $90
+.byte $80, $18, $40, $88
+.byte $80, $17, $40, $90
+
+;sprite jump
+
+	;  y   tile att   x
+.byte $88, $0a, $40, $58
+.byte $88, $09, $40, $60
+.byte $90, $1a, $40, $58
+.byte $90, $19, $40, $60
+
+	
+;sprite dead
+
+	;  y   tile att   x
+.byte $90, $1c, $40, $70
+.byte $90, $1b, $40, $78
+
+;sprite attack
+
+	;  y   tile att   x
+.byte $88, $0e, $40, $88
+.byte $88, $0d, $40, $90
+.byte $90, $1e, $40, $88
+.byte $90, $1d, $40, $90
 
 
 
