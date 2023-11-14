@@ -30,6 +30,7 @@ load_palettes:
   STX PPUADDR ; store high byte of ppu address 
   LDX #$00	; set register value x to 0
   STX PPUADDR
+  
 
 load_palettes_loop:
   LDA palettes, X 	; load value from palette array with offset of x value
@@ -46,7 +47,7 @@ load_sprites_loop:
 	LDA sprites, x  ; loads sprite data and sets an offset of x value
 	STA $0200, x	; stores in ram address with offset of x value
 	INX				; increments x to go to the next element
-	CPX #$2d		; compares with the sprite data amount
+	CPX #$d0		; compares with the sprite data amount
 	BNE load_sprites_loop ; begin loop again if there are elements left
 
 ;background
@@ -109,20 +110,78 @@ forever:
 .segment "RODATA"
 palettes:
 .byte $0f, $02, $10, $20 
-.byte $0f, $01, $21, $39
+.byte $0f, $25, $21, $39
 .byte $0f, $0c, $07, $13
 .byte $0f, $19, $09, $29
 
-.byte $0f, $2d, $10, $15
+.byte $0f, $15, $37, $2a
 .byte $0f, $19, $09, $29
 .byte $0f, $19, $09, $29
 .byte $0f, $19, $09, $29
 
 sprites:
-.byte $70, $05, $00, $80
-.byte $70, $06, $00, $88
-.byte $78, $07, $00, $80
-.byte $78, $08, $00, $88
+
+	;facing right
+
+;sprite static
+
+	;  y   tile att   x
+.byte $58, $01, $00, $58
+.byte $58, $02, $00, $60
+.byte $60, $11, $00, $58
+.byte $60, $12, $00, $60
+
+	
+;sprite run 1
+
+	;  y   tile att   x
+.byte $58, $03, $00, $68
+.byte $58, $04, $00, $70
+.byte $60, $13, $00, $68
+.byte $60, $14, $00, $70
+
+;sprite run 2
+
+	;  y   tile att   x
+.byte $58, $05, $00, $78
+.byte $58, $06, $00, $80
+.byte $60, $15, $00, $78
+.byte $60, $16, $00, $80
+
+;sprite run 3
+
+	;  y   tile att   x
+.byte $58, $07, $00, $88
+.byte $58, $08, $00, $90
+.byte $60, $17, $00, $88
+.byte $60, $18, $00, $90
+
+;sprite jump
+
+	;  y   tile att   x
+.byte $68, $09, $00, $58
+.byte $68, $0a, $00, $60
+.byte $70, $19, $00, $58
+.byte $70, $1a, $00, $60
+
+	
+;sprite dead
+
+	;  y   tile att   x
+.byte $70, $1b, $00, $70
+.byte $70, $1c, $00, $78
+
+;sprite attack
+
+	;  y   tile att   x
+.byte $68, $0d, $00, $88
+.byte $68, $0e, $00, $90
+.byte $70, $1d, $00, $88
+.byte $70, $1e, $00, $90
+
+;
+
+
 
 map:
 	.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
