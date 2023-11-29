@@ -7,12 +7,18 @@
 player_x: .res 1
 player_y: .res 1
 player_face_left: .res 1
+player2_x: .res 1
+player2_y: .res 1
+player2_face_left: .res 1
 frame_counter: .res 1
 controller1: .res 1 
+controller2: .res 1 
 jumping: .res 1    ; 0 = not jumping, 1 = jumping
 ascending: .res 1  ; 0 = descending, 1 = ascending
+jumping2: .res 1    ; 0 = not jumping, 1 = jumping
+ascending2: .res 1  ; 0 = descending, 1 = ascending
 
-.exportzp player_x, player_y, frame_counter
+.exportzp player_x, player_y,player2_x, player2_y, frame_counter
 
 .segment "CODE"
 .proc irq_handler
@@ -46,6 +52,7 @@ no_reset:
 	STA $2005
   RTI
 .endproc
+
 
 .proc read_controller1
   PHP
@@ -439,6 +446,379 @@ update_done:
 
 .import reset_handler
 
+.proc read_controller2
+  PHP
+  PHA
+  TXA
+  PHA
+  TYA
+  PHA
+
+
+  LDA #$01
+  STA $4016     ; write 1 to $4016 to latch controller state
+  LDA #$00
+  STA $4016     ; write 0 to $4016 to begin reading button states
+
+ReadA2: 
+  LDA $4017       ; player 1 - A
+  AND #%00000001  ; only look at bit 0
+  BEQ ReadADone2   ; branch to ReadADone if button is NOT pressed (0)
+                  ; add instructions here to do something when button IS pressed (1)
+  LDA player2_y
+  CMP #$d0      ; Check if player is on ground level or special Y index
+  BEQ DoA2
+  BNE ReadADone2 ; Skip A button processing if not on allowed Y indices
+
+  DoA2:
+  ; Check the direction the player is facing
+  LDA player2_face_left
+  BEQ FacingRight2       ; If facing right, use right-facing sprites
+
+  ; If A is pressed and player is facing left
+  ; player tile attributes for facing left
+  LDA #$42
+  STA $0222
+  STA $0226
+  STA $022a
+  STA $022e
+
+  ; left-facing sprite
+  LDA #$0a
+  STA $0221
+  LDA #$09
+  STA $0225
+  LDA #$1a
+  STA $0229
+  LDA #$19
+
+
+  LDA $00
+  STA player2_face_left
+  INC player2_face_left
+
+  JMP SetJumping2        ; Go to jump setting
+
+FacingRight2:
+; player tile attributes
+  ; palette 0
+  LDA #$02
+  STA $0222
+  STA $0226
+  STA $022a
+  STA $022e
+
+  LDA #$09
+  STA $0221
+  LDA #$0a
+  STA $0225
+  LDA #$19
+  STA $0229
+  LDA #$1a
+
+  LDA $00
+  STA player2_face_left
+
+SetJumping2:
+  LDA #$01
+  STA jumping2          ; Set jumping status to true
+  LDA #$01
+  STA ascending2       ; Start ascending
+
+  LDA player2_y
+	STA $0223
+	STA $022B
+	TAX
+	CLC
+	ADC #$08
+	STA $0227
+	STA $022F
+	DEX
+	STX player2_y
+  	JMP ReadADone2
+
+  JSR check_boundaries2
+
+ReadADone2:        ; handling this button is done
+  
+ReadB2: 
+  LDA $4017       ; player 1 - B
+  AND #%00000001  ; only look at bit 0
+  BEQ ReadBDone2   ; branch to ReadBDone if button is NOT pressed (0)
+                  ; add instructions here to do something when button IS pressed (1)
+  LDA player2_face_left      ; Load the direction the player is facing
+  CMP #0              ; Compare it with zero
+  BNE left_attack2
+
+   ; player tile attributes
+  ; palette 0
+  LDA #$02
+  STA $0222
+  STA $0226
+  STA $022a
+  STA $022e
+
+  LDA #$0d
+  STA $0221
+  LDA #$0e
+  STA $0225
+  LDA #$1d
+  STA $0229
+  LDA #$1e
+  STA $022d
+  JMP ReadBDone2
+
+
+  left_attack2:
+
+  ; player tile attributes
+  ; palette 0
+  LDA #$40
+  STA $0222
+  STA $0226
+  STA $022a
+  STA $022e
+
+
+  LDA #$0e
+  STA $0221
+  LDA #$0d
+  STA $0225
+  LDA #$1e
+  STA $0229
+  LDA #$1d
+  STA $022d
+
+
+ReadBDone2:        ; handling this button is done
+
+ReadSelect2: 
+  LDA $4017       ; player 1 - A
+  AND #%00000001  ; only look at bit 0
+  BEQ ReadSelectDone2   ; branch to ReadADone if button is NOT pressed (0)
+
+ReadSelectDone2:
+
+ReadStart2: 
+  LDA $4017       ; player 1 - A
+  AND #%00000001  ; only look at bit 0
+  BEQ ReadStartDone2   ; branch to ReadADone if button is NOT pressed (0)
+
+ReadStartDone2:
+
+ReadUp2: 
+  LDA $4017       ; player 1 - A
+  AND #%00000001  ; only look at bit 0
+  BEQ ReadUpDone2   ; branch to ReadADone if button is NOT pressed (0)
+
+ReadUpDone2:
+
+ReadDown2: 
+  LDA $4017       ; player 1 - A
+  AND #%00000001  ; only look at bit 0
+  BEQ ReadDownDone2   ; branch to ReadADone if button is NOT pressed (0)
+
+  DoDown2:
+  LDA player2_face_left      ; Load the direction the player is facing
+  CMP #0              ; Compare it with zero
+  BNE left_down2
+
+   ; player tile attributes
+  ; palette 0
+  LDA #$01
+  STA $0222
+  STA $0226
+  STA $022a
+  STA $022e
+
+  JMP ReadDownDone2
+
+
+  left_down2:
+
+  ; player tile attributes
+  ; palette 0
+  LDA #$41
+  STA $0222
+  STA $0226
+  STA $022a
+  STA $022e
+
+ReadDownDone2:
+
+; Move Player 2 Left
+ReadLeft2: 
+  LDA $4017             ; Read button Left from player 2 controller
+  AND #%00000001
+  BEQ ReadLeftDone2     ; If button Left not pressed, skip to ReadLeftDone2
+  ; Logic for moving player 2 left
+  LDA player2_x
+  SEC                   ; Set carry for subtraction
+  SBC #1                ; Move left by decreasing the X coordinate
+  STA player2_x
+  LDA $00
+  STA player2_face_left
+  INC player2_face_left
+  JSR check_boundaries2 
+
+   ; player tile attributes
+  ; palette 0
+  LDA #$42
+  STA $0222
+  STA $0226
+  STA $022a
+  STA $022e
+  ; Animation frame updates here
+  INC frame_counter ; Increment the frame counter for animation
+  LDA frame_counter
+  AND #%00000011    ; Use bitwise AND to cycle through 4 frames (0-3)
+  TAX               ; Transfer to X to use as an index for selecting frame
+
+  ; Select the correct frame based on frame_counter
+  ; Frame one (when frame_counter is 0)
+  CPX #0
+  BEQ load2_leftframe_1
+  CPX #1
+  BEQ load2_leftframe_2
+  ; Frame three (when frame_counter is 2)
+  CPX #2
+  BEQ load2_leftframe_3
+
+  ; Continue with additional frames if you have more than 3
+
+  ; If frame_counter is 3, fall through to load_frame_1
+  ; to loop the animation
+load2_leftframe_1:
+  ; Load tile numbers for frame 1
+  LDA #$04
+  STA $0221
+  LDA #$03
+  STA $0225
+  LDA #$14
+  STA $0229
+  LDA #$13
+  STA $022d
+  JMP update_done2
+
+load2_leftframe_2:
+  ; Load tile numbers for frame 2
+  LDA #$06
+  STA $0221
+  LDA #$05
+  STA $0225
+  LDA #$16
+  STA $0229
+  LDA #$15
+  STA $022d
+  JMP update_done2
+
+load2_leftframe_3:
+  ; Load tile numbers for frame 3
+  LDA #$08
+  STA $0221
+  LDA #$07
+  STA $0225
+  LDA #$18
+  STA $0229
+  LDA #$17
+  STA $022d
+    
+
+ReadLeftDone2:
+
+; Move Player 2 Right
+ReadRight2: 
+  LDA $4017             ; Read button Right from player 2 controller
+  AND #%00000001
+  BEQ ReadRightDone2    ; If button Right not pressed, skip to ReadRightDone2
+  ; Logic for moving player 2 right
+  LDA player2_x
+  CLC                   ; Clear carry for addition
+  ADC #1                ; Move right by increasing the X coordinate
+  STA player2_x
+  JSR check_boundaries2
+
+  LDA $00
+  STA player2_face_left
+
+  ; player tile attributes
+  ; palette 0
+  LDA #$02
+  STA $0222
+  STA $0226
+  STA $022a
+  STA $022e
+  ; Animation frame updates here
+  INC frame_counter ; Increment the frame counter for animation
+  LDA frame_counter
+  AND #%00000011    ; Use bitwise AND to cycle through 4 frames (0-3)
+  TAX               ; Transfer to X to use as an index for selecting frame
+
+  ; Select the correct frame based on frame_counter
+  ; Frame one (when frame_counter is 0)
+  CPX #0
+  BEQ load2_frame_1
+  CPX #1
+  BEQ load2_frame_2
+  ; Frame three (when frame_counter is 2)
+  CPX #2
+  BEQ load2_frame_3
+
+  ; Continue with additional frames if you have more than 3
+
+  ; If frame_counter is 3, fall through to load_frame_1
+  ; to loop the animation
+load2_frame_1:
+  ; Load tile numbers for frame 1
+  LDA #$03
+  STA $0221
+  LDA #$04
+  STA $0225
+  LDA #$13
+  STA $0229
+  LDA #$14
+  STA $022d
+  JMP update_done2
+
+load2_frame_2:
+  ; Load tile numbers for frame 2
+  LDA #$05
+  STA $0221
+  LDA #$06
+  STA $0225
+  LDA #$15
+  STA $0229
+  LDA #$16
+  STA $022d
+  JMP update_done2
+
+load2_frame_3:
+  ; Load tile numbers for frame 3
+  LDA #$07
+  STA $0221
+  LDA #$08
+  STA $0225
+  LDA #$17
+  STA $0229
+  LDA #$18
+  STA $022d
+
+
+ReadRightDone2:
+
+update_done2:
+  ; Restore registers and return
+  PLA
+  TAY
+  PLA
+  TAX
+  PLA
+  PLP
+  RTS
+
+  .endproc
+
+
 .export main
 .proc main
 
@@ -569,6 +949,41 @@ forever:
   STA $020f
 
 
+; Draw Player Two
+
+      ; top left tile:
+  LDA player2_y
+  STA $0220
+  LDA player2_x
+  STA $0223
+
+  ; top right tile (x + 8):
+  LDA player2_y
+  STA $0224
+  LDA player2_x
+  CLC
+  ADC #$08
+  STA $0227
+
+  ; bottom left tile (y + 8):
+  LDA player2_y
+  CLC
+  ADC #$08
+  STA $0228
+  LDA player2_x
+  STA $022b
+
+  ; bottom right tile (x + 8, y + 8)
+  LDA player2_y
+  CLC
+  ADC #$08
+  STA $022c
+  LDA player2_x
+  CLC
+  ADC #$08
+  STA $022f
+
+
   ; restore registers and return
   PLA
   TAY
@@ -591,14 +1006,16 @@ forever:
   TYA
   PHA
 
+  ; First Player Logic
   JSR check_boundaries
-
   JSR is_jumping
+  JSR read_controller1 ; Read controller 1 input
 
-  JSR read_controller1 ; Read controller input
 
-  LDA controller1
-
+  ; Second Player Logic
+  JSR check_boundaries2
+  JSR is_jumping2
+  JSR read_controller2 ; Read controller 2 input
   
 
 
@@ -749,6 +1166,142 @@ NotJumping:
   RTS
 .endproc
 
+; Player Two
+
+.proc check_boundaries2
+  ; Save registers
+  PHP
+  PHA
+  TXA
+  PHA
+  TYA
+  PHA
+  
+  ; Check if player is at the left boundary
+  LDA player2_x
+  CMP #$00
+  BEQ no_move_left2  ; If at left boundary, do not move left
+
+  ; Check if player is at the right boundary
+  CMP #$F8
+  BEQ no_move_right2 ; If at right boundary, do not move right
+
+  ; No boundary hit, can move freely
+  JMP exit2
+
+no_move_left2:
+  ; Prevent moving left by setting player's x position to the left boundary
+  LDA #$04
+  STA player2_x
+  JMP exit2
+
+no_move_right2:
+  ; Prevent moving right by setting player's x position to the right boundary
+  LDA #$F4
+  STA player2_x
+  JMP exit2
+
+  ; y boundary
+
+   ; Check if player is at the up boundary
+  LDA player2_y
+  CMP #$00
+  BEQ no_move_up2  ; If at up boundary, do not move up
+
+  ; Check if player is at the right boundary
+  CMP #$F8
+  BEQ no_move_down2 ; If at right boundary, do not move right
+
+  ; No boundary hit, can move freely
+  JMP exit2
+
+no_move_up2:
+  ; Prevent moving up by setting player's y position to the up boundary
+  LDA #$04
+  STA player2_y
+  JMP exit2
+
+no_move_down2:
+  ; Prevent moving right by setting player's y position to the down boundary
+  LDA #$d0
+  STA player2_y
+  JMP exit2
+
+  
+
+exit2:
+  ; Restore registers and return
+  PLA
+  TAY
+  PLA
+  TAX
+  PLA
+  PLP
+  RTS
+.endproc
+
+.proc is_jumping2
+  ; Save registers
+  PHP
+  PHA
+  TXA
+  PHA
+  TYA
+  PHA
+
+  ; Handle jumping logic
+  LDA jumping2
+  BEQ NotJumping2  ; If not jumping, skip
+
+  LDA ascending2
+  BEQ Descending2  ; If descending, handle descent
+
+Ascent2:
+  ; Handle ascent
+  LDA player2_y
+  CMP #$92       ; Check if we've reached the jump apex
+  BEQ CheckXRange2 ; Check if within the specific X range
+  DEC player2_y    ; Move up
+  CMP #$92        ; Ensure we don't go above the top boundary
+  BNE SkipApexCheck2
+  JMP StartDescent2
+
+SkipApexCheck2:
+  JMP DoneJumping2
+
+CheckXRange2:
+  LDA player2_x
+  CMP #$40
+  BCC StartDescent2 ; If less than #$40, start descent
+  CMP #$B9
+  BCS StartDescent2 ; If greater than or equal to #$B9, start descent
+  ; Within range, can stand on #$8e
+  JMP DoneJumping2
+
+StartDescent2:
+  LDA #$00
+  STA ascending2   ; Start descending
+
+Descending2:
+  LDA player2_y
+  CMP #$d0        ; Check if we've reached ground level
+  BEQ NotJumping2  ; If at ground level, stop jumping
+  INC player2_y    ; Move down
+  JMP DoneJumping2
+
+DoneJumping2:
+  ; Continue with the rest of the update code
+
+NotJumping2:
+  PLA
+  TAY
+  PLA
+  TAX
+  PLA
+  PLP
+  RTS
+.endproc
+
 .segment "VECTORS"
 .addr nmi_handler, reset_handler, irq_handler
 
@@ -763,124 +1316,6 @@ palettes:
 .byte $0f, $02, $10, $20
 .byte $0f, $19, $09, $29
 .byte $0f, $19, $09, $29
-
-; sprites:
-
-; 	;facing right
-
-; ;sprite static
-
-; 	;  y   tile att   x
-; .byte $58, $01, $00, $58
-; .byte $58, $02, $00, $60
-; .byte $60, $11, $00, $58
-; .byte $60, $12, $00, $60
-
-	
-; ;sprite run 1
-
-; 	;  y   tile att   x
-; .byte $58, $03, $00, $68
-; .byte $58, $04, $00, $70
-; .byte $60, $13, $00, $68
-; .byte $60, $14, $00, $70
-
-; ;sprite run 2
-
-; 	;  y   tile att   x
-; .byte $58, $05, $00, $78
-; .byte $58, $06, $00, $80
-; .byte $60, $15, $00, $78
-; .byte $60, $16, $00, $80
-
-; ;sprite run 3
-
-; 	;  y   tile att   x
-; .byte $58, $07, $00, $88
-; .byte $58, $08, $00, $90
-; .byte $60, $17, $00, $88
-; .byte $60, $18, $00, $90
-
-; ;sprite jump
-
-; 	;  y   tile att   x
-; .byte $68, $09, $00, $58
-; .byte $68, $0a, $00, $60
-; .byte $70, $19, $00, $58
-; .byte $70, $1a, $00, $60
-
-	
-; ;sprite dead
-
-; 	;  y   tile att   x
-; .byte $70, $1b, $00, $70
-; .byte $70, $1c, $00, $78
-
-; ;sprite attack
-
-; 	;  y   tile att   x
-; .byte $68, $0d, $00, $88
-; .byte $68, $0e, $00, $90
-; .byte $70, $1d, $00, $88
-; .byte $70, $1e, $00, $90
-
-; ; ;facing left
-
-; ;sprite static
-
-; 	;  y   tile att   x
-; .byte $78, $02, $40, $58
-; .byte $78, $01, $40, $60
-; .byte $80, $12, $40, $58
-; .byte $80, $11, $40, $60
-
-	
-; ;sprite run 1
-
-; 	;  y   tile att   x
-; .byte $78, $04, $40, $68
-; .byte $78, $03, $40, $70
-; .byte $80, $14, $40, $68
-; .byte $80, $13, $40, $70
-
-; ;sprite run 2
-
-; 	;  y   tile att   x
-; .byte $78, $06, $40, $78
-; .byte $78, $05, $40, $80
-; .byte $80, $16, $40, $78
-; .byte $80, $15, $40, $80
-
-; ;sprite run 3
-
-; 	;  y   tile att   x
-; .byte $78, $08, $40, $88
-; .byte $78, $07, $40, $90
-; .byte $80, $18, $40, $88
-; .byte $80, $17, $40, $90
-
-; ;sprite jump
-
-; 	;  y   tile att   x
-; .byte $88, $0a, $40, $58
-; .byte $88, $09, $40, $60
-; .byte $90, $1a, $40, $58
-; .byte $90, $19, $40, $60
-
-	
-; ;sprite dead
-
-; 	;  y   tile att   x
-; .byte $90, $1c, $40, $70
-; .byte $90, $1b, $40, $78
-
-; ;sprite attack
-
-; 	;  y   tile att   x
-; .byte $88, $0e, $40, $88
-; .byte $88, $0d, $40, $90
-; .byte $90, $1e, $40, $88
-; .byte $90, $1d, $40, $90
 
 
 
